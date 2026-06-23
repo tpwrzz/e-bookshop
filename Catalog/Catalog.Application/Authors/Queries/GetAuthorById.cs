@@ -5,11 +5,11 @@ using MediatR;
 
 namespace Catalog.Application.Authors.Queries
 {
-    public record GetAuthorByIdCommand(Guid Id) : IRequest<Result<AuthorDto>>;
-    public class GetAuthorByIdCommandHandler(IAuthorRepository authorRepository) : IRequestHandler<GetAuthorByIdCommand, Result<AuthorDto>>
+    public record GetAuthorByIdQuery(Guid Id) : IRequest<Result<AuthorDto>>;
+    public class GetAuthorByIdQueryHandler(IAuthorRepository authorRepository) : IRequestHandler<GetAuthorByIdQuery, Result<AuthorDto>>
     {
         private readonly IAuthorRepository _repository = authorRepository;
-        public async Task<Result<AuthorDto>> Handle(GetAuthorByIdCommand request, CancellationToken cancellationToken)
+        public async Task<Result<AuthorDto>> Handle(GetAuthorByIdQuery request, CancellationToken cancellationToken)
         {
             var author = await _repository.GetByIdAsync(request.Id);
             if (author is null)
@@ -25,7 +25,7 @@ namespace Catalog.Application.Authors.Queries
             {
                 ResultStatus = ResultStatus.Success,
                 Data = dto,
-                Message = $"Author with Id {request.Id} was deleted."
+                Message = string.Empty
             };
         }
     }

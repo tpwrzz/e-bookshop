@@ -1,6 +1,4 @@
 ﻿using Catalog.Application.Common;
-using Catalog.Application.DTOs.Auhtors;
-using Catalog.Domain;
 using Catalog.Domain.Repositories;
 using MediatR;
 

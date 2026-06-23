@@ -1,10 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Catalog.Application.Authors.Commands;
+using FluentValidation;
 
 namespace Catalog.Application.Validators.Authors
 {
-    internal class UpdateAuthorCommandValidator
+    public class UpdateAuthorCommandValidator : AbstractValidator<UpdateAuthorCommand>
     {
+        public UpdateAuthorCommandValidator()
+        {
+            RuleFor(x => x.Author.FirstName)
+                   .NotEmpty()
+                   .MaximumLength(40);
+            RuleFor(x => x.Author.LastName)
+                 .NotEmpty()
+                 .MaximumLength(40);
+            RuleFor(x => x.Author.Bio)
+                 .MaximumLength(600);
+        }
     }
 }

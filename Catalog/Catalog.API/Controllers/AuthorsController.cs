@@ -1,13 +1,9 @@
 ﻿using Catalog.Application.Authors.Commands;
 using Catalog.Application.Authors.Queries;
-using Catalog.Application.Books.Commands;
-using Catalog.Application.Books.Queries;
 using Catalog.Application.Common;
 using Catalog.Application.DTOs.Auhtors;
-using Catalog.Application.DTOs.Books;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using static Catalog.Application.Books.Queries.GetBooks;
 
 namespace Catalog.API.Controllers
 {
@@ -20,7 +16,7 @@ namespace Catalog.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var result = await _mediator.Send(new GetAuthorByIdCommand(id));
+            var result = await _mediator.Send(new GetAuthorByIdQuery(id));
 
             return result.ResultStatus switch
             {
@@ -31,9 +27,9 @@ namespace Catalog.API.Controllers
         }
 
         [HttpGet("all")]
-        public async Task<IActionResult> GetByFilter()
+        public async Task<IActionResult> GetAll()
         {
-            var result = await _mediator.Send(new GetAuthorsCommand());
+            var result = await _mediator.Send(new GetAuthorsQuery());
 
             return result.ResultStatus switch
             {
@@ -44,19 +40,19 @@ namespace Catalog.API.Controllers
         }
 
         [HttpPost("createAuthor")]
-        public async Task<IActionResult> CreateBook(AuthorDto author)
+        public async Task<IActionResult> CreateAuthor(AuthorDto author)
         {
             var result = await _mediator.Send(new CreateAuthorCommand(author));
 
             return result.ResultStatus switch
             {
-                ResultStatus.Success => Ok(result.Message),
+                ResultStatus.Created => CreatedAtAction(nameof(CreateAuthor), result.Message),
                 ResultStatus.NotFound => NotFound(result.Message),
                 _ => StatusCode(500, result.Message)
             };
         }
         [HttpPatch("updateAuthor")]
-        public async Task<IActionResult> UpdateBookPrice(AuthorDto author)
+        public async Task<IActionResult> UpdateAuthor(AuthorDto author)
         {
             var result = await _mediator.Send(new UpdateAuthorCommand(author));
 

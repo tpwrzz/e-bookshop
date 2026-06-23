@@ -49,7 +49,7 @@ namespace Catalog.API.Controllers
 
             return result.ResultStatus switch
             {
-                ResultStatus.Success => Ok(result.Message),
+                ResultStatus.Created => CreatedAtAction(nameof(CreateBook), result.Message),
                 ResultStatus.NotFound => NotFound(result.Message),
                 _ => StatusCode(500, result.Message)
             };
@@ -85,7 +85,7 @@ namespace Catalog.API.Controllers
 
             return result.ResultStatus switch
             {
-                ResultStatus.Success => Ok(result.Message),
+                ResultStatus.Created => CreatedAtAction(nameof(AddReview), result.Message),
                 ResultStatus.NotFound => NotFound(result.Message),
                 _ => StatusCode(500, result.Message)
             };

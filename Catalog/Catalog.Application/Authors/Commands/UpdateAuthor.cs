@@ -13,7 +13,7 @@ namespace Catalog.Application.Authors.Commands
         public async Task<Result> Handle(UpdateAuthorCommand request, CancellationToken cancellationToken)
         {
             var authorToChange = await _repository.GetByIdAsync(request.Author.Id);
-            if (authorToChange != null)
+            if (authorToChange == null)
             {
                 return new Result()
                 {

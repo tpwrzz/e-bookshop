@@ -15,12 +15,11 @@ namespace Catalog.Domain
         public double AverageRating { get; private set; }
         public bool Availability { get; private set; }
         public DateTime PublicationDate { get; private set; }
-        
         public ICollection<Review> Reviews { get; private set; } = [];
         private Book() { }
 
         public Book(Guid id, string title, string description, ICollection<Genres> genre, int pageCount, Money price,
-                    Languages language, bool availability, DateTime publicationDate, Author author)
+                    Languages language, bool availability, DateTime publicationDate, Author author, ICollection<Review> reviews = null)
         {
             Id = id;
             Title = title;
@@ -32,6 +31,7 @@ namespace Catalog.Domain
             Availability = availability;
             PublicationDate = publicationDate;
             Author = author;
+            Reviews = reviews is null ? [] : (ICollection<Review>)reviews.ToList();
         }
         public void UpdatePrice(Money newPrice)
         {

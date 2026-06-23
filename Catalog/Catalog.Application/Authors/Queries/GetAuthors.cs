@@ -5,11 +5,11 @@ using MediatR;
 
 namespace Catalog.Application.Authors.Queries
 {
-    public record GetAuthorsCommand() : IRequest<Result<List<AuthorDto>>>;
-    public class GetAuthorsCommandHandler(IAuthorRepository authorRepository) : IRequestHandler<GetAuthorsCommand, Result<List<AuthorDto>>>
+    public record GetAuthorsQuery() : IRequest<Result<List<AuthorDto>>>;
+    public class GetAuthorsQueryHandler(IAuthorRepository authorRepository) : IRequestHandler<GetAuthorsQuery, Result<List<AuthorDto>>>
     {
         private readonly IAuthorRepository _repository = authorRepository;
-        public async Task<Result<List<AuthorDto>>> Handle(GetAuthorsCommand request, CancellationToken cancellationToken)
+        public async Task<Result<List<AuthorDto>>> Handle(GetAuthorsQuery request, CancellationToken cancellationToken)
         {
             var authors = await _repository.GetAllAsync();
             if (authors is null)
