@@ -1,0 +1,10 @@
+﻿namespace e_bookshop.Catalog.Application.DTOs.Reviews
+{
+    public class AddReviewDto
+    {
+        public Guid BookId { get; set; }
+        public Guid UserId { get; set; }
+        public required string Message { get; set; }
+        public int Rating { get; set; }
+    }
+}

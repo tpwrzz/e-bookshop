@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "e-bookshop": {
+      "commandName": "Project"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    }
+  }
+}
