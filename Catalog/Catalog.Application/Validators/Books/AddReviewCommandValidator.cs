@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
-using static e_bookshop.Catalog.Application.Books.Commands.AddReview;
+using static Catalog.Application.Books.Commands.AddReview;
 
-namespace e_bookshop.Catalog.Application.Validators
+namespace Catalog.Application.Validators.Books
 {
     public class AddReviewCommandValidator : AbstractValidator<AddReviewCommand>
     {

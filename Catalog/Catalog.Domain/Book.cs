@@ -1,6 +1,6 @@
-﻿using e_bookshop.Domain.Enums;
+﻿using Catalog.Domain.Enums;
 
-namespace e_bookshop.Catalog.Domain
+namespace Catalog.Domain
 {
     public class Book
     {
@@ -53,9 +53,7 @@ namespace e_bookshop.Catalog.Domain
         }
         public void UpdateReview(Guid reviewId, Guid userId, string message, Rating rating)
         {
-            var review = Reviews.FirstOrDefault(r => r.Id == reviewId);
-            if (review is null)
-                throw new InvalidOperationException($"Review {reviewId} not found.");
+            var review = Reviews.FirstOrDefault(r => r.Id == reviewId) ?? throw new InvalidOperationException($"Review {reviewId} not found.");
             if (review.UserId != userId)
                 throw new UnauthorizedAccessException("You can only edit your own reviews.");
 

@@ -1,11 +1,11 @@
-﻿using e_bookshop.Catalog.Application.Common;
-using e_bookshop.Catalog.Application.DTOs.Books;
-using e_bookshop.Catalog.Domain;
-using e_bookshop.Catalog.Domain.Repositories;
-using e_bookshop.Domain.Enums;
+﻿using Catalog.Application.Common;
+using Catalog.Application.DTOs.Books;
+using Catalog.Domain;
+using Catalog.Domain.Enums;
+using Catalog.Domain.Repositories;
 using MediatR;
 
-namespace e_bookshop.Catalog.Application.Books.Commands
+namespace Catalog.Application.Books.Commands
 {
     public record UpdateBookPriceCommand(UpdatePriceBookDto UpdateBook) : IRequest<Result>;
     public class UpdateBookPriceCommandHandler(IBookRepository repository) : IRequestHandler<UpdateBookPriceCommand, Result>

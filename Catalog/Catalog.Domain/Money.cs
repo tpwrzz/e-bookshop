@@ -1,6 +1,6 @@
-﻿using e_bookshop.Domain.Enums;
+﻿using Catalog.Domain.Enums;
 
-namespace e_bookshop.Catalog.Domain
+namespace Catalog.Domain
 {
     public class Money
     {

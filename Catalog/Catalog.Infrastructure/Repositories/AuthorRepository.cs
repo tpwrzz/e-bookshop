@@ -1,33 +1,39 @@
-﻿using e_bookshop.Catalog.Domain;
-using e_bookshop.Catalog.Domain.Repositories;
+﻿using Catalog.Domain;
+using Catalog.Domain.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace Catalog.Infrastructure.Repositories
 {
-    public class AuthorRepository : IAuthorRepository
+    public class AuthorRepository(CatalogContext context) : IAuthorRepository
     {
-        public Task AddAsync(Author book)
+        private readonly CatalogContext _context = context;
+        public async Task AddAsync(Author author)
         {
-            throw new NotImplementedException();
+            await _context.Authors.AddAsync(author);
+            await _context.SaveChangesAsync();
         }
 
-        public Task DeleteAsync(Guid id)
+        public async Task DeleteAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var author = await _context.Authors.FirstOrDefaultAsync(a => a.Id == id);
+            var _ = _context.Authors.Remove(author);
+            await _context.SaveChangesAsync();
         }
 
-        public Task<IEnumerable<Author>> GetAllAsync()
+        public async Task<IEnumerable<Author>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await _context.Authors.ToListAsync();
         }
 
-        public Task<Author?> GetByIdAsync(Guid id)
+        public async Task<Author?> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            return await _context.Authors.FirstOrDefaultAsync(a => a.Id == id);
         }
 
-        public Task UpdateAsync(Author book)
+        public async Task UpdateAsync(Author author)
         {
-            throw new NotImplementedException();
+            _context.Authors.Update(author);
+            await _context.SaveChangesAsync();
         }
     }
 }

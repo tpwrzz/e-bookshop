@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using static Catalog.Application.Books.Commands.UpdateReview;
 
-namespace Catalog.Application.Validators
+namespace Catalog.Application.Validators.Books
 {
     public class UpdateReviewCommandValidator : AbstractValidator<UpdateReviewCommand>
     {

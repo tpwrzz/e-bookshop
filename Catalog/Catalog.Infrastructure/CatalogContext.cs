@@ -1,9 +1,9 @@
-﻿using e_bookshop.Catalog.Domain;
-using e_bookshop.Domain.Enums;
+﻿using Catalog.Domain;
+using Catalog.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
-namespace e_bookshop.Catalog.Infrastructure
+namespace Catalog.Infrastructure
 {
     public class CatalogContext(DbContextOptions<CatalogContext> options) : DbContext(options)
     {

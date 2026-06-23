@@ -1,4 +1,4 @@
-﻿namespace e_bookshop.Catalog.Application.DTOs.Reviews
+﻿namespace Catalog.Application.DTOs.Reviews
 {
     public class ReviewDto
     {

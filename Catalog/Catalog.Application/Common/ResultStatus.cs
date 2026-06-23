@@ -1,4 +1,4 @@
-﻿namespace e_bookshop.Catalog.Application.Common
+﻿namespace Catalog.Application.Common
 {
     public enum ResultStatus
     {

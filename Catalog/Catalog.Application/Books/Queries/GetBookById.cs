@@ -1,11 +1,11 @@
-﻿using e_bookshop.Catalog.Application.Common;
-using e_bookshop.Catalog.Application.DTOs;
-using e_bookshop.Catalog.Application.DTOs.Books;
-using e_bookshop.Catalog.Application.DTOs.Reviews;
-using e_bookshop.Catalog.Domain.Repositories;
+﻿using Catalog.Application.Common;
+using Catalog.Application.DTOs.Auhtors;
+using Catalog.Application.DTOs.Books;
+using Catalog.Application.DTOs.Reviews;
+using Catalog.Domain.Repositories;
 using MediatR;
 
-namespace e_bookshop.Catalog.Application.Books.Queries
+namespace Catalog.Application.Books.Queries
 {
     public record GetBookByIdQuery(Guid Id) : IRequest<Result<BookDto>>;
 

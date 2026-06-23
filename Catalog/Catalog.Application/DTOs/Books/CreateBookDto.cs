@@ -1,6 +1,6 @@
-﻿using e_bookshop.Domain.Enums;
+﻿using Catalog.Domain.Enums;
 
-namespace e_bookshop.Catalog.Application.DTOs.Books
+namespace Catalog.Application.DTOs.Books
 {
     public class CreateBookDto
     {

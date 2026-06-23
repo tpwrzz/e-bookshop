@@ -1,7 +1,7 @@
-﻿using e_bookshop.Catalog.Application.Books.Commands;
+﻿using Catalog.Application.Books.Commands;
 using FluentValidation;
 
-namespace e_bookshop.Catalog.Application.Validators
+namespace Catalog.Application.Validators.Books
 {
     public class CreateBookCommandValidator : AbstractValidator<CreateBookCommand>
     {

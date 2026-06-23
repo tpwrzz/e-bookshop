@@ -1,7 +1,7 @@
-﻿using e_bookshop.Catalog.Application.DTOs.Pagination;
-using e_bookshop.Domain.Enums;
+﻿using Catalog.Application.DTOs.Pagination;
+using Catalog.Domain.Enums;
 
-namespace e_bookshop.Catalog.Application.DTOs.Books
+namespace Catalog.Application.DTOs.Books
 {
     public class BookFilterDto
     {

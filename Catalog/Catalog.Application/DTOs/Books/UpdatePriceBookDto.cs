@@ -1,4 +1,4 @@
-﻿namespace e_bookshop.Catalog.Application.DTOs.Books
+﻿namespace Catalog.Application.DTOs.Books
 {
     public class UpdatePriceBookDto
     {

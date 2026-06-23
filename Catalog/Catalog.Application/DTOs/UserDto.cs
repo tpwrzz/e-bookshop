@@ -1,4 +1,4 @@
-﻿namespace e_bookshop.Catalog.Application.DTOs
+﻿namespace Catalog.Application.DTOs
 {
     internal class UserDto
     {

@@ -1,7 +1,8 @@
-﻿using e_bookshop.Catalog.Application.DTOs.Reviews;
-using e_bookshop.Domain.Enums;
+﻿using Catalog.Application.DTOs.Auhtors;
+using Catalog.Application.DTOs.Reviews;
+using Catalog.Domain.Enums;
 
-namespace e_bookshop.Catalog.Application.DTOs.Books
+namespace Catalog.Application.DTOs.Books
 {
     public class BookDto
     {

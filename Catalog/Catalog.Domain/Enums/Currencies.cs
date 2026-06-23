@@ -1,4 +1,4 @@
-﻿namespace e_bookshop.Domain.Enums
+﻿namespace Catalog.Domain.Enums
 {
     public enum Currencies
     {

@@ -1,7 +1,7 @@
-﻿using Catalog.Application.DTOs.Reviews;
-using e_bookshop.Catalog.Application.Common;
-using e_bookshop.Catalog.Domain;
-using e_bookshop.Catalog.Domain.Repositories;
+﻿using Catalog.Application.Common;
+using Catalog.Application.DTOs.Reviews;
+using Catalog.Domain;
+using Catalog.Domain.Repositories;
 using MediatR;
 
 namespace Catalog.Application.Books.Commands
@@ -10,8 +10,7 @@ namespace Catalog.Application.Books.Commands
     {
         public record UpdateReviewCommand(UpdateReviewDto Review) : IRequest<Result>;
 
-        public class UpdateReviewCommandHandler(IBookRepository repository)
-            : IRequestHandler<UpdateReviewCommand, Result>
+        public class UpdateReviewCommandHandler(IBookRepository repository): IRequestHandler<UpdateReviewCommand, Result>
         {
             private readonly IBookRepository _repository = repository;
 

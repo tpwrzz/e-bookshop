@@ -1,4 +1,4 @@
-﻿namespace e_bookshop.Catalog.Domain.Repositories
+﻿namespace Catalog.Domain.Repositories
 {
     public interface IAuthorRepository
     {
@@ -6,9 +6,9 @@
 
         Task<IEnumerable<Author>> GetAllAsync();
 
-        Task AddAsync(Author book);
+        Task AddAsync(Author author);
 
-        Task UpdateAsync(Author book);
+        Task UpdateAsync(Author author);
 
         Task DeleteAsync(Guid id);
     }

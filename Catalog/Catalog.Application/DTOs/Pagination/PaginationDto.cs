@@ -1,4 +1,4 @@
-﻿namespace e_bookshop.Catalog.Application.DTOs.Pagination
+﻿namespace Catalog.Application.DTOs.Pagination
 {
     public class PaginationDto
     {

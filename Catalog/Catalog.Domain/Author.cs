@@ -1,4 +1,4 @@
-﻿namespace e_bookshop.Catalog.Domain
+﻿namespace Catalog.Domain
 {
     public class Author
     {

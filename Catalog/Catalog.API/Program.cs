@@ -1,8 +1,8 @@
+using Catalog.Application.Books.Commands;
+using Catalog.Application.Books.Queries;
+using Catalog.Domain.Repositories;
+using Catalog.Infrastructure;
 using Catalog.Infrastructure.Repositories;
-using e_bookshop.Catalog.Application.Books.Commands;
-using e_bookshop.Catalog.Application.Books.Queries;
-using e_bookshop.Catalog.Domain.Repositories;
-using e_bookshop.Catalog.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,7 +25,6 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
     app.UseSwagger();
     app.UseSwaggerUI();
 }
@@ -33,4 +32,4 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
-app.Run();
+await app.RunAsync();
