@@ -56,3 +56,6 @@ CodeCoverage/
 TestResult.xml
 nunit-*.xml
 /.vs
+/Catalog/.vs/e-bookshop.slnx
+/Catalog/.vs
+/Catalog-ec/.vs

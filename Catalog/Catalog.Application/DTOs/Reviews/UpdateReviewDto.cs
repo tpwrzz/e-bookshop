@@ -1,0 +1,11 @@
+﻿namespace Catalog.Application.DTOs.Reviews
+{
+    public class UpdateReviewDto
+    {
+        public Guid BookId { get; set; }
+        public Guid ReviewId { get; set; }
+        public Guid UserId { get; set; }
+        public required string Message { get; set; }
+        public int Rating { get; set; }
+    }
+}
