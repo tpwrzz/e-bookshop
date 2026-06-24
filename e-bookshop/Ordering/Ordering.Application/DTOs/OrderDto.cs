@@ -12,5 +12,6 @@ namespace Ordering.Application.DTOs
         public required AddressDto Address { get; set; }
         public decimal TotalCost { get; set; }
         public Currency Currency { get; set; }
+        public Guid UserId { get; set; }
     }
 }

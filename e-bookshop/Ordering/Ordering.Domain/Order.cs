@@ -16,10 +16,11 @@ namespace Ordering.Domain
         public OrderStatus OrderStatus { get; private set; }
         public Address Address { get; private set; }
         public Money TotalCost { get; private set; }
+        public Guid UserId { get; private set; }
         public IReadOnlyList<IDomainEvent> DomainEvents => _domainEvents.AsReadOnly();
         private Order() { }
 
-        public static Order Place(Guid id, ICollection<OrderItem> items, Address address, Money totalCost)
+        public static Order Place(Guid id, ICollection<OrderItem> items, Address address, Money totalCost, Guid userId)
         {
             var order = new Order
             {
@@ -28,7 +29,8 @@ namespace Ordering.Domain
                 Address = address,
                 TotalCost = totalCost,
                 OrderStatus = OrderStatus.Pending,
-                PlacedDate = DateTime.UtcNow
+                PlacedDate = DateTime.UtcNow,
+                UserId = userId
             };
 
             order.AddDomainEvent(new OrderPlacedEvent(order.Id, order.TotalCost));

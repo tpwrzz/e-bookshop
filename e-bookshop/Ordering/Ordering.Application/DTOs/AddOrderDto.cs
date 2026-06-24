@@ -8,5 +8,6 @@ namespace Ordering.Application.DTOs
         public ICollection<AddOrderItemDto> OrderItems { get; set; } = [];
         public required AddressDto Address { get; set; } 
         public Currency Currency { get; set; }
+        public Guid UserId { get; set; }
     }
 }

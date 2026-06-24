@@ -21,8 +21,8 @@ namespace Ordering.Application.Orders.Commands
                     id: Guid.NewGuid(),
                     title: item.Title,
                     price: new Money(amount: item.Price, currency: request.Order.Currency),
-                    quantity: item.Amount
-                    ));
+                    quantity: item.Quantity
+                ));
             }
             var order = Order.Place(
                 id: Guid.NewGuid(),
@@ -32,7 +32,8 @@ namespace Ordering.Application.Orders.Commands
                     request.Order.Address.City,
                     request.Order.Address.Country,
                     request.Order.Address.Postcode),
-                totalCost: new Money(amount: list.Sum(i => i.Price.Amount * i.Quantity), currency: request.Order.Currency)
+                totalCost: new Money(amount: list.Sum(i => i.Price.Amount * i.Quantity), currency: request.Order.Currency),
+                userId: request.Order.UserId
                 );
             await _repository.SaveAsync(order);
             return new Result<Guid>()
