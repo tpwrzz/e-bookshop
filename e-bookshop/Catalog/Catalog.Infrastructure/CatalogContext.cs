@@ -18,10 +18,10 @@ namespace Catalog.Infrastructure
             .HasConversion(
         g => string.Join(',', g.Select(x => x.ToString())),
         g => g.Split(',', StringSplitOptions.RemoveEmptyEntries)
-              .Select(x => Enum.Parse<Genres>(x))
-              .ToList<Genres>())
+              .Select(x => Enum.Parse<Genre>(x))
+              .ToList<Genre>())
     .HasColumnType("nvarchar(500)")
-    .Metadata.SetValueComparer(new ValueComparer<ICollection<Genres>>(
+    .Metadata.SetValueComparer(new ValueComparer<ICollection<Genre>>(
         (c1, c2) => c1!.SequenceEqual(c2!),
         c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
         c => c.ToList()));

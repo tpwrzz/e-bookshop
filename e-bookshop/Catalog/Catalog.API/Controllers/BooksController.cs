@@ -1,5 +1,4 @@
 using Catalog.Application.Books.Commands;
-using Catalog.Application.Common;
 using Catalog.Application.DTOs.Books;
 using Catalog.Application.DTOs.Reviews;
 using MediatR;
@@ -8,6 +7,7 @@ using static Catalog.Application.Books.Commands.UpdateReview;
 using static Catalog.Application.Books.Commands.AddReview;
 using static Catalog.Application.Books.Queries.GetBooks;
 using Catalog.Application.Books.Queries;
+using Bookshop.SharedKernel.Application.Common;
 
 namespace Catalog.API.Controllers
 {

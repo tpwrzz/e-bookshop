@@ -1,7 +1,7 @@
-﻿using Catalog.Application.Common;
+﻿using Bookshop.SharedKernel.Application.Common;
+using Bookshop.SharedKernel.Domain;
+using Bookshop.SharedKernel.Domain.Enums;
 using Catalog.Application.DTOs.Books;
-using Catalog.Domain;
-using Catalog.Domain.Enums;
 using Catalog.Domain.Repositories;
 using MediatR;
 
@@ -22,7 +22,7 @@ namespace Catalog.Application.Books.Commands
                     Message = $"Book with Id {request.UpdateBook.Id} was not found."
                 };
 
-            Enum.TryParse(request.UpdateBook.NewCurrency, true, out Currencies currency);
+            Enum.TryParse(request.UpdateBook.NewCurrency, true, out Currency currency);
             var newPrice = new Money(request.UpdateBook.NewPrice, currency);
             bookToUpdate.UpdatePrice(newPrice);
             await _repository.UpdateAsync(bookToUpdate);

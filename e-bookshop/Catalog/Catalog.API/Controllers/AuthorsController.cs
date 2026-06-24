@@ -1,6 +1,6 @@
-﻿using Catalog.Application.Authors.Commands;
+﻿using Bookshop.SharedKernel.Application.Common;
+using Catalog.Application.Authors.Commands;
 using Catalog.Application.Authors.Queries;
-using Catalog.Application.Common;
 using Catalog.Application.DTOs.Auhtors;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

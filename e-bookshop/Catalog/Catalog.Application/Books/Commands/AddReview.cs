@@ -1,4 +1,4 @@
-﻿using Catalog.Application.Common;
+﻿using Bookshop.SharedKernel.Application.Common;
 using Catalog.Application.DTOs.Reviews;
 using Catalog.Domain;
 using Catalog.Domain.Repositories;

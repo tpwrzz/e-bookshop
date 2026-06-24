@@ -9,11 +9,11 @@ namespace Catalog.Application.DTOs.Books
         public Guid Id { get; set; }
         public required string Title { get; set; }
         public string Description { get; set; } = "No summary yet.";
-        public ICollection<Genres> Genre { get; set; } = [];
+        public ICollection<Genre> Genre { get; set; } = [];
         public int PageCount { get; set; }
         public double Price { get; set; }
         public required string Currency { get; set; }
-        public Languages Language { get; set; }
+        public Language Language { get; set; }
         public double AverageRating { get; set; }
         public bool Availability { get; set; }
         public required string PublicationDate { get; set; }

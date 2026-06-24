@@ -38,7 +38,7 @@ namespace Catalog.Infrastructure.Repositories
             .FirstOrDefaultAsync(b => b.Id == id);
         }
 
-        public async Task<(IEnumerable<Book> books, int totalCount)> GetPagedAsync(int page, int pageSize, ICollection<Genres>? genre = null, bool? availability = null, int? rating = null, Languages? language = null, string? authorName = null, CancellationToken cancellationToken = default)
+        public async Task<(IEnumerable<Book> books, int totalCount)> GetPagedAsync(int page, int pageSize, ICollection<Genre>? genre = null, bool? availability = null, int? rating = null, Language? language = null, string? authorName = null, CancellationToken cancellationToken = default)
         {
             var query = _context.Books.Include(b => b.Author).AsQueryable();
 

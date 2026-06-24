@@ -1,5 +1,5 @@
-﻿using Catalog.Application.Books.Commands;
-using Catalog.Domain.Enums;
+﻿using Bookshop.SharedKernel.Domain.Enums;
+using Catalog.Application.Books.Commands;
 using FluentValidation;
 
 namespace Catalog.Application.Validators.Books
@@ -13,7 +13,7 @@ namespace Catalog.Application.Validators.Books
 
             RuleFor(x => x.UpdateBook.NewCurrency)
                     .NotEmpty()
-                    .Must(c => Enum.TryParse<Currencies>(c, true, out _))
+                    .Must(c => Enum.TryParse<Currency>(c, true, out _))
                     .WithMessage("'{PropertyValue}' is not a valid currency code.");
         }
     }

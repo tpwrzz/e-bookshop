@@ -6,5 +6,14 @@
     <Project Path="Catalog/Catalog.Infrastructure/Catalog.Infrastructure.csproj" />
     <Project Path="Catalog/Catalog.Tests/Catalog.Tests.csproj" />
   </Folder>
-  <Folder Name="/Ordering/" />
+  <Folder Name="/Ordering/">
+    <Project Path="Ordering/Ordering.API/Ordering.API.csproj" Id="209ac2ee-2d26-4c47-8360-1c1dd1b68509" />
+    <Project Path="Ordering/Ordering.Application/Ordering.Application.csproj" Id="00fe497b-7522-4367-bb63-6c04d4762377" />
+    <Project Path="Ordering/Ordering.Domain/Ordering.Domain.csproj" Id="f31fa6b7-47a4-43a4-918b-a38f295f6899" />
+    <Project Path="Ordering/Ordering.Infrastructure/Ordering.Infrastructure.csproj" Id="02240ace-759d-4073-b037-a0342fe4b375" />
+    <Project Path="Ordering/Ordering.Tests/Ordering.Tests.csproj" Id="6f494254-b028-4799-8798-2aecb3a66310" />
+  </Folder>
+  <Folder Name="/SharedKernel/">
+    <Project Path="SharedKernel/Bookshop.SharedKernel/Bookshop.SharedKernel.csproj" Id="1c2b7128-dc2d-4a8f-b304-0f1a67f20067" />
+  </Folder>
 </Solution>

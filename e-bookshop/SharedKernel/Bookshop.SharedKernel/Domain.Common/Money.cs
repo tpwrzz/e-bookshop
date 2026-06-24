@@ -1,12 +1,12 @@
-﻿using Catalog.Domain.Enums;
+﻿using Bookshop.SharedKernel.Domain.Enums;
 
-namespace Catalog.Domain
+namespace Bookshop.SharedKernel.Domain
 {
     public class Money
     {
         public double Amount { get; }
-        public Currencies Currency { get; }
-        public Money(double amount, Currencies currency)
+        public Currency Currency { get; }
+        public Money(double amount, Currency currency)
         {
             if (amount < 0)
                 throw new ArgumentException("Price cannot be negative");

@@ -16,10 +16,10 @@ namespace Catalog.Domain.Repositories
         Task<(IEnumerable<Book> books, int totalCount)> GetPagedAsync(
             int page,
             int pageSize,
-            ICollection<Genres>? genre = null,
+            ICollection<Genre>? genre = null,
             bool? availability = null,
             int? rating = null,
-            Languages? language = null,
+            Language? language = null,
             string? authorName = null,
             CancellationToken cancellationToken = default); 
     }

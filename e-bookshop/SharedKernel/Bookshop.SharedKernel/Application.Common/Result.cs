@@ -1,4 +1,4 @@
-﻿namespace Catalog.Application.Common
+﻿namespace Bookshop.SharedKernel.Application.Common
 {
     public class Result
     {
