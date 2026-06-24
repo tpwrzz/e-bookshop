@@ -40,7 +40,7 @@ namespace Catalog.API.Controllers
         }
 
         [HttpPost("createAuthor")]
-        public async Task<IActionResult> CreateAuthor(AuthorDto author)
+        public async Task<IActionResult> CreateAuthor(AddAuthorDto author)
         {
             var result = await _mediator.Send(new CreateAuthorCommand(author));
 

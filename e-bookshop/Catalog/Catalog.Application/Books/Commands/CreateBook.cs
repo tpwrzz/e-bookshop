@@ -1,5 +1,6 @@
 ﻿using Bookshop.SharedKernel.Application.Common;
 using Bookshop.SharedKernel.Domain;
+using Bookshop.SharedKernel.Domain.Common;
 using Catalog.Application.DTOs.Books;
 using Catalog.Domain;
 using Catalog.Domain.Repositories;

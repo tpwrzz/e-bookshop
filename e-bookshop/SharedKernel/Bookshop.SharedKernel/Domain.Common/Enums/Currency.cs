@@ -1,4 +1,4 @@
-﻿namespace Bookshop.SharedKernel.Domain.Enums
+﻿namespace Bookshop.SharedKernel.Domain.Common.Enums
 {
     public enum Currency
     {

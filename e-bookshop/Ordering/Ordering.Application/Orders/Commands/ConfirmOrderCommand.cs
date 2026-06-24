@@ -15,10 +15,17 @@ namespace Ordering.Application.Orders.Commands
             var order = await _repository.GetByIdAsync(request.Id);
             if (order is null) return new Result()
             {
-                Message = $"Order with id: {request.Id} now found",
+                Message = $"Order with id: {request.Id} not found",
                 ResultStatus = ResultStatus.NotFound
-            };
-            order.UpdateOrderStatus(OrderStatus.Confirmed);
+            }; 
+            try
+            {
+                order.TransitionStatus(OrderStatus.Confirmed);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return new Result { ResultStatus = ResultStatus.BadRequest, Message = ex.Message };
+            }
             await _repository.UpdateAsync(order);
             return new Result()
             {

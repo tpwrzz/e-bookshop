@@ -1,4 +1,4 @@
-﻿using Bookshop.SharedKernel.Domain.Enums;
+﻿using Bookshop.SharedKernel.Domain.Common.Enums;
 using Catalog.Application.Books.Commands;
 using FluentValidation;
 

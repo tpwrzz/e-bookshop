@@ -1,4 +1,4 @@
-﻿using Bookshop.SharedKernel.Domain.Enums;
+﻿using Bookshop.SharedKernel.Domain.Common.Enums;
 using Catalog.Domain.Enums;
 
 namespace Catalog.Application.DTOs.Books
@@ -9,7 +9,7 @@ namespace Catalog.Application.DTOs.Books
         public string Description { get; set; } = "No summary yet.";
         public ICollection<Genre> Genre { get; set; } = [];
         public int PageCount { get; set; }
-        public double Price { get; set; }
+        public decimal Price { get; set; }
         public Currency Currency { get; set; }
         public Language Language { get; set; }
         public double AverageRating { get; set; }

@@ -1,18 +1,18 @@
 ﻿using Bookshop.SharedKernel.Application.Common;
+using Bookshop.SharedKernel.Domain;
 using MediatR;
 using Ordering.Application.DTOs;
 using Ordering.Domain;
-using Ordering.Domain.Enums;
 using Ordering.Domain.Repositories;
 
 namespace Ordering.Application.Orders.Commands
 {
-    public record PlaceOrderCommand(OrderDto Order) : IRequest<Result>;
+    public record PlaceOrderCommand(AddOrderDto Order) : IRequest<Result<Guid>>;
 
-    public class PlaceOrderCommandHandler(IOrderRepository repository) : IRequestHandler<PlaceOrderCommand, Result>
+    public class PlaceOrderCommandHandler(IOrderRepository repository) : IRequestHandler<PlaceOrderCommand, Result<Guid>>
     {
         private readonly IOrderRepository _repository = repository;
-        public async Task<Result> Handle(PlaceOrderCommand request, CancellationToken cancellationToken)
+        public async Task<Result<Guid>> Handle(PlaceOrderCommand request, CancellationToken cancellationToken)
         {
             var list = new List<OrderItem>();
             foreach (var item in request.Order.OrderItems)
@@ -20,23 +20,26 @@ namespace Ordering.Application.Orders.Commands
                 list.Add(new OrderItem(
                     id: Guid.NewGuid(),
                     title: item.Title,
-                    price: new Bookshop.SharedKernel.Domain.Money(amount: item.Price, currency: request.Order.Currency),
-                    amount: item.Amount
+                    price: new Money(amount: item.Price, currency: request.Order.Currency),
+                    quantity: item.Amount
                     ));
             }
-            var address = request.Order.Address.Split(',');
-            var order = new Order(
+            var order = Order.Place(
                 id: Guid.NewGuid(),
-                orderItems: list,
-                orderStatus: OrderStatus.Pending,
-                address: new Address(address[0].Trim(), address[1].Trim(), address[2].Trim(), address[3].Trim()),
-                totalCost: new Bookshop.SharedKernel.Domain.Money(amount: request.Order.TotalCost, currency: request.Order.Currency)
+                items: list,
+                address: new Address(
+                    request.Order.Address.Street,
+                    request.Order.Address.City,
+                    request.Order.Address.Country,
+                    request.Order.Address.Postcode),
+                totalCost: new Money(amount: list.Sum(i => i.Price.Amount * i.Quantity), currency: request.Order.Currency)
                 );
             await _repository.SaveAsync(order);
-            return new Result()
+            return new Result<Guid>()
             {
-                ResultStatus = ResultStatus.Success,
-                Message = $"Order with id: {request.Order.Id} is placed"
+                ResultStatus = ResultStatus.Created,
+                Data = order.Id,
+                Message = $"Order with id: {order.Id} is placed"
             };
         }
     }

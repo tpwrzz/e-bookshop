@@ -6,7 +6,7 @@ using MediatR;
 
 namespace Catalog.Application.Authors.Commands
 {
-    public record CreateAuthorCommand(AuthorDto Author) : IRequest<Result>;
+    public record CreateAuthorCommand(AddAuthorDto Author) : IRequest<Result>;
     public class CreateAuthorCommandHandler(IAuthorRepository authorRepository) : IRequestHandler<CreateAuthorCommand, Result>
     {
         private readonly IAuthorRepository _repository = authorRepository;

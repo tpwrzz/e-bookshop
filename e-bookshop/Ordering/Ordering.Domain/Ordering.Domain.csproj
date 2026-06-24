@@ -10,4 +10,8 @@
     <ProjectReference Include="..\..\SharedKernel\Bookshop.SharedKernel\Bookshop.SharedKernel.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Events\" />
+  </ItemGroup>
+
 </Project>

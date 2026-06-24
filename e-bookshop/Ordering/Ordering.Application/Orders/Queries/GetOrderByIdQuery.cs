@@ -30,14 +30,14 @@ namespace Ordering.Application.Orders.Queries
                     Id = item.Id,
                     Title = item.Title,
                     Price = item.Price.Amount,
-                    Amount = item.Amount
+                    Quantity = item.Quantity
                 });
             }
             var dto = new OrderDto()
             {
                 Id = request.Id,
                 OrderItems = list,
-                Address = order.Address.ToString(),
+                Address = new AddressDto() { Street = order.Address.Street, City = order.Address.City, Country = order.Address.Country, Postcode = order.Address.Postcode},
                 OrderStatus = order.OrderStatus,
                 TotalCost = order.TotalCost.Amount,
                 Currency = order.TotalCost.Currency
