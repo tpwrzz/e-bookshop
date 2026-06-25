@@ -2,7 +2,7 @@
 using Ordering.Domain;
 using Ordering.Domain.Enums;
 
-namespace Catalog.Infrastructure
+namespace Ordering.Infrastructure
 {
     public class OrderingContext(DbContextOptions<OrderingContext> options) : DbContext(options)
     {

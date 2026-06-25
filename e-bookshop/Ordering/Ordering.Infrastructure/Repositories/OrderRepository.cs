@@ -1,5 +1,4 @@
-﻿using Catalog.Infrastructure;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Ordering.Domain;
 using Ordering.Domain.Repositories;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;

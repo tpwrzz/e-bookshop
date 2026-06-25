@@ -22,8 +22,9 @@
 		<PackageReference Include="Serilog.Enrichers.Thread" Version="4.0.0" />
 		<PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.11.0" />
 	</ItemGroup>
+
 	<ItemGroup>
-		<ProjectReference Include="..\Catalog.Application\Catalog.Application.csproj" />
-		<ProjectReference Include="..\Catalog.Infrastructure\Catalog.Infrastructure.csproj" />
+	  <ProjectReference Include="..\..\Ordering\Ordering.Application\Ordering.Application.csproj" />
+	  <ProjectReference Include="..\..\Ordering\Ordering.Infrastructure\Ordering.Infrastructure.csproj" />
 	</ItemGroup>
 </Project>

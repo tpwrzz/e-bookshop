@@ -1,3 +1,11 @@
+using FluentValidation;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Ordering.Application.Behaviors;
+using Ordering.Application.Orders.Commands;
+using Ordering.Domain.Repositories;
+using Ordering.Infrastructure;
+using Ordering.Infrastructure.Repositories;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
@@ -25,22 +33,20 @@ try
     builder.Services.AddOpenApi();
     builder.Services.AddSwaggerGen();
 
-    //builder.Services.AddDbContext<CatalogContext>(options =>
-    //    options.UseSqlServer(builder.Configuration.GetConnectionString("CatalogDb")));
+    builder.Services.AddDbContext<OrderingContext>(options =>
+        options.UseSqlServer(builder.Configuration.GetConnectionString("OrdersDb")));
 
-    //// Validators
-    //builder.Services.AddValidatorsFromAssembly(typeof(CreateBookCommand).Assembly);
+    // Validators
+    builder.Services.AddValidatorsFromAssembly(typeof(PlaceOrderCommand).Assembly);
 
-    // MediatR — single registration
-    //builder.Services.AddMediatR(cfg =>
-    //{
-    //    cfg.RegisterServicesFromAssembly(typeof(CreateBookCommand).Assembly);
-    //    cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
-    //    cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
-    //});
+    builder.Services.AddMediatR(cfg =>
+    {
+        cfg.RegisterServicesFromAssembly(typeof(PlaceOrderCommand).Assembly);
+        cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
+        cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+    });
 
-    //builder.Services.AddScoped<IBookRepository, BookRepository>();
-    //builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
+    builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 
     var app = builder.Build();
 
