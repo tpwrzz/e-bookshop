@@ -1,0 +1,127 @@
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      retries: 10
+      start_period: 20s
+  catalog-db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      SA_PASSWORD: "YourStrong!Passw0rd"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    volumes:
+      - catalog-db-data:/var/opt/mssql
+    healthcheck:
+      test: ["CMD", "/opt/mssql-tools18/bin/sqlcmd",
+             "-S", "localhost", "-U", "sa", "-P", "YourStrong!Passw0rd",
+             "-Q", "SELECT 1", "-C"]
+      interval: 10s
+      retries: 10
+      start_period: 30s
+
+  ordering-db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      SA_PASSWORD: "YourStrong!Passw0rd"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1434:1433"          # Different HOST port — same container port 1433
+    volumes:
+      - ordering-db-data:/var/opt/mssql
+    healthcheck:
+      test: ["CMD", "/opt/mssql-tools18/bin/sqlcmd",
+             "-S", "localhost", "-U", "sa", "-P", "YourStrong!Passw0rd",
+             "-Q", "SELECT 1", "-C"]
+      interval: 10s
+      retries: 10
+      start_period: 30s
+
+  catalog-api:
+    build:
+      context: .                          # repo root — SharedKernel is visible
+      dockerfile: Catalog/Catalog.API/Dockerfile
+    ports:
+      - "5103:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__CatalogDb: >
+        Server=catalog-db;Database=e-bookshop-catalog;
+        User Id=sa;Password=YourStrong!Passw0rd;
+        TrustServerCertificate=True;
+    depends_on:
+      catalog-db:
+        condition: service_healthy
+
+  ordering-api:
+    build:
+      context: .
+      dockerfile: Ordering/Ordering.API/Dockerfile
+    ports:
+      - "5263:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      RabbitMQ__Host: rabbitmq
+      ConnectionStrings__OrdersDb: >
+        Server=ordering-db;Database=e-bookshop-orders;
+        User Id=sa;Password=YourStrong!Passw0rd;
+        TrustServerCertificate=True;
+    depends_on:
+      ordering-db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  couchbase:
+    image: couchbase:community-7.6.1
+    ports:
+      - "8091:8091"
+      - "8093:8093"
+      - "11210:11210"
+    volumes:
+      - couchbase-data:/opt/couchbase/var
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8091/pools"]
+      interval: 10s
+      retries: 15
+      start_period: 60s
+
+  couchbase-init:
+    image: couchbase:community-7.6.1
+    depends_on:
+      couchbase:
+        condition: service_healthy
+    restart: "no"
+    entrypoint: ["/bin/bash", "-c", "sleep 15 && couchbase-cli cluster-init -c couchbase://couchbase --cluster-username Administrator --cluster-password password --cluster-ramsize 512 --services data,index,query && couchbase-cli bucket-create -c couchbase://couchbase --username Administrator --password password --bucket basket --bucket-type couchbase --bucket-ramsize 128"]
+  
+  basket-api:
+    build:
+      context: .
+      dockerfile: Basket/Basket.API/Dockerfile
+    ports:
+      - "5189:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__Couchbase: couchbase://couchbase
+      Couchbase__Username: Administrator
+      Couchbase__Password: password
+      Couchbase__BucketName: basket
+      RabbitMQ__Host: rabbitmq
+    depends_on:
+      couchbase:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+volumes:
+  catalog-db-data:
+  ordering-db-data:
+  rabbitmq-data:
+  couchbase-data:  

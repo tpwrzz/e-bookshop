@@ -1,6 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Bookshop.Contracts.Messages;
+using Microsoft.EntityFrameworkCore;
 using Ordering.Domain;
 using Ordering.Domain.Repositories;
+using Ordering.Infrastructure.Outbox;
+using System.Text.Json;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Ordering.Infrastructure.Repositories
@@ -26,7 +29,30 @@ namespace Ordering.Infrastructure.Repositories
 
         public async Task SaveAsync(Order order)
         {
+            await _context.Orders.AddAsync(order);
+            foreach (var domainEvent in order.DomainEvents)
+            {
+                if (domainEvent is OrderPlacedEvent placedEvent)
+                {
+                    var payload = JsonSerializer.Serialize(new OrderPlaced(
+                        OrderId: placedEvent.Id,
+                        UserId: order.UserId,
+                        TotalAmount: placedEvent.TotalCost.Amount,
+                        Currency: placedEvent.TotalCost.Currency.ToString(),
+                        PlacedAt: DateTime.UtcNow
+                    ));
+
+                    _context.OutboxMessages.Add(new OutboxMessage
+                    {
+                        Id = Guid.NewGuid(),
+                        Type = nameof(OrderPlaced),
+                        Payload = payload,
+                        CreatedAt = DateTime.UtcNow
+                    });
+                }
+            }
             await _context.SaveChangesAsync();
+            order.ClearDomainEvents();
         }
 
         public async Task UpdateAsync(Order order)

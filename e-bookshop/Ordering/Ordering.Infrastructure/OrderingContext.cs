@@ -1,12 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Ordering.Domain;
 using Ordering.Domain.Enums;
+using Ordering.Infrastructure.Outbox;
 
 namespace Ordering.Infrastructure
 {
     public class OrderingContext(DbContextOptions<OrderingContext> options) : DbContext(options)
     {
         public DbSet<Order> Orders { get; set; }
+        public DbSet<OutboxMessage> OutboxMessages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -17,13 +19,12 @@ namespace Ordering.Infrastructure
                 o.Property(x => x.OrderStatus)
                     .HasConversion<string>();
 
-                o.OwnsOne(x => x.TotalCost, money =>
+                o.OwnsOne(x => x.TotalCost, moneyBuilder =>
                 {
-                    money.Property(m => m.Amount)
-                        .HasColumnName("TotalCost");
-
-                    money.Property(m => m.Currency)
-                        .HasColumnName("Currency");
+                    moneyBuilder.Property(m => m.Amount)
+                        .HasColumnName("Price")
+                        .HasColumnType("decimal(18,2)");  // add this
+                    moneyBuilder.Property(m => m.Currency).HasColumnName("Currency");
                 });
 
                 o.OwnsOne(x => x.Address, address =>
@@ -38,15 +39,19 @@ namespace Ordering.Infrastructure
                 {
                     item.WithOwner().HasForeignKey("OrderId");
 
-                    item.OwnsOne(i => i.Price, money =>
+                    item.OwnsOne(i => i.Price, moneyBuilder =>
                     {
-                        money.Property(m => m.Amount)
-                            .HasColumnName("Price");
-
-                        money.Property(m => m.Currency)
-                            .HasColumnName("Currency");
+                        moneyBuilder.Property(m => m.Amount)
+                            .HasColumnName("Price")
+                            .HasColumnType("decimal(18,2)");  
                     });
                 });
+            });
+            modelBuilder.Entity<OutboxMessage>(o =>
+            {
+                o.HasKey(x => x.Id);
+                o.Property(x => x.Payload).HasColumnType("nvarchar(max)");
+                o.Property(x => x.ProcessedAt).IsRequired(false);
             });
         }
     }

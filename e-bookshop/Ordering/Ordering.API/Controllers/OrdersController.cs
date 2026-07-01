@@ -44,7 +44,7 @@ namespace Ordering.API.Controllers
 
             return result.ResultStatus switch
             {
-                ResultStatus.Created => CreatedAtAction(nameof(OrderDto), result.Message),
+                ResultStatus.Created => CreatedAtAction(nameof(GetById), new { id = result.Data }, result.Data),
                 ResultStatus.NotFound => NotFound(result.Message),
                 _ => StatusCode(500, result.Message)
             };

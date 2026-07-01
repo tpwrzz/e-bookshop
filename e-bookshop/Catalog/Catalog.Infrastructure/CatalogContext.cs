@@ -36,7 +36,9 @@ namespace Catalog.Infrastructure
 
                 b.OwnsOne(book => book.Price, moneyBuilder =>
                 {
-                    moneyBuilder.Property(m => m.Amount).HasColumnName("Price");
+                    moneyBuilder.Property(m => m.Amount)
+                        .HasColumnName("Price")
+                        .HasColumnType("decimal(18,2)"); 
                     moneyBuilder.Property(m => m.Currency).HasColumnName("Currency");
                 });
             });

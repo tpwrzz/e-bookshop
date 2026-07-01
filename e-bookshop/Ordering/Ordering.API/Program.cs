@@ -1,10 +1,12 @@
 using FluentValidation;
+using MassTransit;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Ordering.Application.Behaviors;
 using Ordering.Application.Orders.Commands;
 using Ordering.Domain.Repositories;
 using Ordering.Infrastructure;
+using Ordering.Infrastructure.Outbox;
 using Ordering.Infrastructure.Repositories;
 using Serilog;
 
@@ -33,10 +35,23 @@ try
     builder.Services.AddOpenApi();
     builder.Services.AddSwaggerGen();
 
+    builder.Services.AddMassTransit(x =>
+    {
+        x.UsingRabbitMq((ctx, cfg) =>
+        {
+            cfg.Host(builder.Configuration["RabbitMQ:Host"], "/", h =>
+            {
+                h.Username(builder.Configuration["RabbitMQ:Username"]);
+                h.Password(builder.Configuration["RabbitMQ:Password"]);
+            });
+        });
+    });
+
+    builder.Services.AddHostedService<OutboxPublisherService>();
+
     builder.Services.AddDbContext<OrderingContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("OrdersDb")));
 
-    // Validators
     builder.Services.AddValidatorsFromAssembly(typeof(PlaceOrderCommand).Assembly);
 
     builder.Services.AddMediatR(cfg =>
@@ -49,7 +64,11 @@ try
     builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 
     var app = builder.Build();
-
+    using (var scope = app.Services.CreateScope())
+    {
+        var db = scope.ServiceProvider.GetRequiredService<OrderingContext>(); // or OrderingContext
+        db.Database.Migrate();
+    }
     app.UseSerilogRequestLogging(opts =>
     {
         opts.MessageTemplate =
@@ -70,7 +89,7 @@ try
 }
 catch (Exception ex)
 {
-    Log.Fatal(ex, "Catalog API terminated unexpectedly");
+    Log.Fatal(ex, "Ordering API terminated unexpectedly");
 }
 finally
 {

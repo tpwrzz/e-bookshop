@@ -14,5 +14,6 @@ namespace Bookshop.SharedKernel.Domain
             Amount = amount;
             Currency = currency;
         }
+        private Money() { }
     }
 }

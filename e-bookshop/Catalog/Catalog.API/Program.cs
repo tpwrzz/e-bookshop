@@ -51,7 +51,11 @@ try
     builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
 
     var app = builder.Build();
-
+    using (var scope = app.Services.CreateScope())
+    {
+        var db = scope.ServiceProvider.GetRequiredService<CatalogContext>(); 
+        db.Database.Migrate();
+    }
     app.UseSerilogRequestLogging(opts =>
     {
         opts.MessageTemplate =

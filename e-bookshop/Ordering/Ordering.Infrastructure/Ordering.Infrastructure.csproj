@@ -8,11 +8,13 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.9" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.9" />
 		<PackageReference Include="Microsoft.Extensions.Options" Version="10.0.9" />
+		<PackageReference Include="MassTransit.RabbitMQ" Version="8.2.5" />
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\SharedKernel\Bookshop.Contracts\Bookshop.Contracts.csproj" />
 		<ProjectReference Include="..\Ordering.Domain\Ordering.Domain.csproj" />
 	</ItemGroup>
 
