@@ -6,12 +6,12 @@ Each service is independently deployable, owns its own database, and communicate
 
 ## Services
 
-- **Catalog** — books, authors, genres, search (MSSQL)
-- **Ordering** — order lifecycle with a full DDD aggregate (MSSQL)
-- **Basket** — per-user shopping cart (Couchbase)
-- **Payments** — payment processing, choreography Saga (MSSQL)
-- **Notifications** — event-driven email/push consumer (DynamoDB)
-- **Identity** — auth and JWT (MSSQL)
+- **Catalog** - books, authors, genres, search (MSSQL)
+- **Ordering** - order lifecycle with a full DDD aggregate (MSSQL)
+- **Basket** - per-user shopping cart (Couchbase)
+- **Payments** - payment processing, choreography Saga (MSSQL)
+- **Notifications** - event-driven email/push consumer (DynamoDB)
+- **Identity** - auth and JWT (MSSQL)
 
 ## Stack
 
