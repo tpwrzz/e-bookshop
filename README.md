@@ -30,7 +30,7 @@ Each service is independently deployable, owns its own database, and communicate
 ## Running locally
 
 ```bash
-git clone https://github.com/your-username/e-bookshop.git
+git clone https://github.com/tpwrzz/e-bookshop.git
 cd e-bookshop/e-bookshop
 docker compose up -d
 ```
