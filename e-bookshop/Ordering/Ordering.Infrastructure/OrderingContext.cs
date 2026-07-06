@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Ordering.Domain;
 using Ordering.Domain.Enums;
+using Ordering.Infrastructure.Idempotency;
 using Ordering.Infrastructure.Outbox;
 
 namespace Ordering.Infrastructure
@@ -9,6 +10,7 @@ namespace Ordering.Infrastructure
     {
         public DbSet<Order> Orders { get; set; }
         public DbSet<OutboxMessage> OutboxMessages { get; set; }
+        public DbSet<ProcessedMessage> ProcessedMessages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -43,7 +45,7 @@ namespace Ordering.Infrastructure
                     {
                         moneyBuilder.Property(m => m.Amount)
                             .HasColumnName("Price")
-                            .HasColumnType("decimal(18,2)");  
+                            .HasColumnType("decimal(18,2)");
                     });
                 });
             });
@@ -52,6 +54,11 @@ namespace Ordering.Infrastructure
                 o.HasKey(x => x.Id);
                 o.Property(x => x.Payload).HasColumnType("nvarchar(max)");
                 o.Property(x => x.ProcessedAt).IsRequired(false);
+            });
+            modelBuilder.Entity<ProcessedMessage>(p =>
+            {
+                p.HasKey(x => x.MessageId);
+                p.Property(x => x.MessageType).HasMaxLength(200);
             });
         }
     }

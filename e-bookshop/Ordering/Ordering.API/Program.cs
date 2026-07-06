@@ -6,6 +6,7 @@ using Ordering.Application.Behaviors;
 using Ordering.Application.Orders.Commands;
 using Ordering.Domain.Repositories;
 using Ordering.Infrastructure;
+using Ordering.Infrastructure.Consumers;
 using Ordering.Infrastructure.Outbox;
 using Ordering.Infrastructure.Repositories;
 using Serilog;
@@ -37,6 +38,9 @@ try
 
     builder.Services.AddMassTransit(x =>
     {
+        x.AddConsumer<PaymentProcessedConsumer>();
+        x.AddConsumer<PaymentFailedConsumer>();
+
         x.UsingRabbitMq((ctx, cfg) =>
         {
             cfg.Host(builder.Configuration["RabbitMQ:Host"], "/", h =>
@@ -44,6 +48,8 @@ try
                 h.Username(builder.Configuration["RabbitMQ:Username"]);
                 h.Password(builder.Configuration["RabbitMQ:Password"]);
             });
+
+            cfg.ConfigureEndpoints(ctx);
         });
     });
 

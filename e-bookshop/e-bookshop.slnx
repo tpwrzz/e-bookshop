@@ -14,12 +14,19 @@
     <Project Path="Ordering/Ordering.Tests/Ordering.Tests.csproj" Id="6f494254-b028-4799-8798-2aecb3a66310" />
   </Folder>
     <Folder Name="/Basket/">
-    <Project Path="Basket/Basket.API/Basket.API.csproj"  />
-    <Project Path="Basket/Basket.Application/Basket.Application.csproj"  />
-    <Project Path="Basket/Basket.Domain/Basket.Domain.csproj"  />
-    <Project Path="Basket/Basket.Infrastructure/Basket.Infrastructure.csproj"  />
-    <Project Path="Basket/Basket.Tests/Basket.Tests.csproj"  />
+    <Project Path="Basket/Basket.API/Basket.API.csproj" />
+    <Project Path="Basket/Basket.Application/Basket.Application.csproj" />
+    <Project Path="Basket/Basket.Domain/Basket.Domain.csproj" />
+    <Project Path="Basket/Basket.Infrastructure/Basket.Infrastructure.csproj" />
+    <Project Path="Basket/Basket.Tests/Basket.Tests.csproj" />
   </Folder>
+    <Folder Name="/Payments/">
+        <Project Path="Payments/Payments.API/Payments.API.csproj" />
+        <Project Path="Payments/Payments.Application/Payments.Application.csproj" />
+        <Project Path="Payments/Payments.Domain/Payments.Domain.csproj" />
+        <Project Path="Payments/Payments.Infrastructure/Payments.Infrastructure.csproj" />
+        <Project Path="Payments/Payments.Tests/Payments.Tests.csproj" />
+    </Folder>
   <Folder Name="/SharedKernel/">
     <Project Path="SharedKernel/Bookshop.Contracts/Bookshop.Contracts.csproj" Id="5f937bdf-db37-4ff3-a6e8-3820c5fa79a9" />
     <Project Path="SharedKernel/Bookshop.SharedKernel/Bookshop.SharedKernel.csproj" Id="1c2b7128-dc2d-4a8f-b304-0f1a67f20067" />
