@@ -19,13 +19,13 @@ Each service is independently deployable, owns its own database, and communicate
 
 ## Patterns
 
-- Clean Architecture enforced at the project level — Domain has no outward dependencies
+- Clean Architecture enforced at the project level - Domain has no outward dependencies
 - DDD aggregates with domain events, value objects, and status transition guards
 - CQRS via MediatR with a ValidationBehavior and LoggingBehavior pipeline
-- Outbox pattern for reliable domain event publishing — order and outbox message written in one transaction
+- Outbox pattern for reliable domain event publishing - order and outbox message written in one transaction
 - Choreography Saga across Ordering and Payments with idempotency guards on every consumer
-- Database-per-service — no shared schemas, no cross-service joins
-- Result<T> pattern throughout — no exceptions for expected failures
+- Database-per-service - no shared schemas, no cross-service joins
+- Result<T> pattern throughout - no exceptions for expected failures
 
 ## Running locally
 
