@@ -31,7 +31,6 @@ try
             "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level:u3}] {Message:lj} {Properties:j}{NewLine}{Exception}"));
 
     builder.Services.AddControllers();
-    builder.Services.AddOpenApi();
     builder.Services.AddSwaggerGen();
 
     // Couchbase
@@ -78,7 +77,10 @@ try
     if (app.Environment.IsDevelopment())
     {
         app.UseSwagger();
-        app.UseSwaggerUI();
+        app.UseSwaggerUI(c =>
+        {
+            c.SwaggerEndpoint("/basket/swagger/v1/swagger.json", "Basket API");
+        });
     }
 
     app.UseHttpsRedirection();

@@ -1,4 +1,4 @@
-﻿namespace BookShop.Contracts.Messages;
+﻿namespace Bookshop.Contracts.Messages;
 
 public record PaymentFailed(
     Guid OrderId,

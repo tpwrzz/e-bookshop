@@ -1,0 +1,6 @@
+@Bookshop.Gateway_HostAddress = http://localhost:5240
+
+GET {{Bookshop.Gateway_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

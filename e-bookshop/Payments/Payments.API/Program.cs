@@ -1,41 +1,85 @@
-var builder = WebApplication.CreateBuilder(args);
+using MassTransit;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Payments.Domain.Repositories;
+using Payments.Infrastructure;
+using Payments.Infrastructure.Consumers;
+using Payments.Infrastructure.Repositories;
+using Serilog;
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .CreateBootstrapLogger();
 
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+try
 {
-    app.MapOpenApi();
+    var builder = WebApplication.CreateBuilder(args);
+
+    builder.Host.UseSerilog((ctx, services, config) => config
+        .ReadFrom.Configuration(ctx.Configuration)
+        .ReadFrom.Services(services)
+        .Enrich.FromLogContext()
+        .Enrich.WithMachineName()
+        .Enrich.WithThreadId()
+        .WriteTo.Console(outputTemplate:
+            "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj} {Properties:j}{NewLine}{Exception}")
+        .WriteTo.File("logs/payments-.log",
+            rollingInterval: RollingInterval.Day,
+            outputTemplate:
+            "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level:u3}] {Message:lj} {Properties:j}{NewLine}{Exception}"));
+
+    builder.Services.AddControllers();
+    builder.Services.AddSwaggerGen();
+
+    builder.Services.AddDbContext<PaymentsContext>(options =>
+        options.UseSqlServer(builder.Configuration.GetConnectionString("PaymentsDb")));
+
+    builder.Services.AddMassTransit(x =>
+    {
+        x.AddConsumer<OrderPlacedConsumer>();
+
+        x.UsingRabbitMq((ctx, cfg) =>
+        {
+            cfg.Host(builder.Configuration["RabbitMQ:Host"], "/", h =>
+            {
+                h.Username(builder.Configuration["RabbitMQ:Username"]);
+                h.Password(builder.Configuration["RabbitMQ:Password"]);
+            });
+
+            cfg.ConfigureEndpoints(ctx);
+        });
+    });
+
+    builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
+
+    var app = builder.Build();
+    using (var scope = app.Services.CreateScope())
+    {
+        var db = scope.ServiceProvider.GetRequiredService<PaymentsContext>();
+        await db.Database.MigrateAsync();
+    }
+    app.UseSerilogRequestLogging();
+
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI(c =>
+        {
+            c.SwaggerEndpoint("/payments/swagger/v1/swagger.json", "Payments API");
+        });
+    }
+
+    app.UseHttpsRedirection();
+    app.UseAuthorization();
+    app.MapControllers();
+
+    await app.RunAsync();
 }
-
-app.UseHttpsRedirection();
-
-var summaries = new[]
+catch (Exception ex)
 {
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
+    Log.Fatal(ex, "Payments API terminated unexpectedly");
+}
+finally
 {
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
-
-app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+    await Log.CloseAndFlushAsync();
 }

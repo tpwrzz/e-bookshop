@@ -1,4 +1,4 @@
-﻿using BookShop.Contracts.Messages;
+﻿using Bookshop.Contracts.Messages;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;

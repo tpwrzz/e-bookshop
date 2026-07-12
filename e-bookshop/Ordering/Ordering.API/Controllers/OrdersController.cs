@@ -25,10 +25,10 @@ namespace Ordering.API.Controllers
                 _ => StatusCode(500, result.Message)
             };
         }
-        [HttpGet("{userId}")]
-        public async Task<IActionResult> GetByUserId(Guid id)
+        [HttpGet("user/{userId}")]
+        public async Task<IActionResult> GetByUserId(Guid userId)
         {
-            var result = await _mediator.Send(new GetOrdersByUserQuery(id));
+            var result = await _mediator.Send(new GetOrdersByUserQuery(userId));
 
             return result.ResultStatus switch
             {

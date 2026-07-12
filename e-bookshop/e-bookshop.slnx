@@ -6,6 +6,9 @@
     <Project Path="Catalog/Catalog.Infrastructure/Catalog.Infrastructure.csproj" />
     <Project Path="Catalog/Catalog.Tests/Catalog.Tests.csproj" />
   </Folder>
+    <Folder Name="/Gateway/">
+        <Project Path="Gateway/Bookshop.Gateway/Bookshop.Gateway.csproj" />
+    </Folder>
   <Folder Name="/Ordering/">
     <Project Path="Ordering/Ordering.API/Ordering.API.csproj" Id="209ac2ee-2d26-4c47-8360-1c1dd1b68509" />
     <Project Path="Ordering/Ordering.Application/Ordering.Application.csproj" Id="00fe497b-7522-4367-bb63-6c04d4762377" />

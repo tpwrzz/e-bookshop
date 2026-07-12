@@ -33,7 +33,6 @@ try
             "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level:u3}] {Message:lj} {Properties:j}{NewLine}{Exception}"));
 
     builder.Services.AddControllers();
-    builder.Services.AddOpenApi();
     builder.Services.AddSwaggerGen();
 
     builder.Services.AddMassTransit(x =>
@@ -72,8 +71,8 @@ try
     var app = builder.Build();
     using (var scope = app.Services.CreateScope())
     {
-        var db = scope.ServiceProvider.GetRequiredService<OrderingContext>(); // or OrderingContext
-        db.Database.Migrate();
+        var db = scope.ServiceProvider.GetRequiredService<OrderingContext>();
+        await db.Database.MigrateAsync();
     }
     app.UseSerilogRequestLogging(opts =>
     {
@@ -84,7 +83,10 @@ try
     if (app.Environment.IsDevelopment())
     {
         app.UseSwagger();
-        app.UseSwaggerUI();
+        app.UseSwaggerUI(c =>
+        {
+            c.SwaggerEndpoint("/ordering/swagger/v1/swagger.json", "Ordering API");
+        });
     }
 
     app.UseHttpsRedirection();

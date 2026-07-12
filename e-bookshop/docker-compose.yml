@@ -120,8 +120,60 @@ services:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
+
+  payments-db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      SA_PASSWORD: "YourStrong!Passw0rd"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1435:1433"
+    volumes:
+      - payments-db-data:/var/opt/mssql
+    healthcheck:
+      test: ["CMD", "/opt/mssql-tools18/bin/sqlcmd",
+             "-S", "localhost", "-U", "sa", "-P", "YourStrong!Passw0rd",
+             "-Q", "SELECT 1", "-C"]
+      interval: 10s
+      retries: 10
+      start_period: 30s
+
+  payments-api:
+    build:
+      context: .
+      dockerfile: Payments/Payments.API/Dockerfile
+    ports:
+      - "5246:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__PaymentsDb: "Server=payments-db;Database=e-bookshop-payments;User Id=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=True;"
+      RabbitMQ__Host: rabbitmq
+    depends_on:
+      payments-db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  gateway:
+    build:
+      context: .
+      dockerfile: Gateway/Bookshop.Gateway/Dockerfile
+    ports:
+      - "5000:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ReverseProxy__Clusters__catalog-cluster__Destinations__catalog-api__Address: http://catalog-api:8080
+      ReverseProxy__Clusters__ordering-cluster__Destinations__ordering-api__Address: http://ordering-api:8080
+      ReverseProxy__Clusters__basket-cluster__Destinations__basket-api__Address: http://basket-api:8080
+      ReverseProxy__Clusters__payments-cluster__Destinations__payments-api__Address: http://payments-api:8080
+    depends_on:
+      - catalog-api
+      - ordering-api
+      - basket-api
+      - payments-api
 volumes:
   catalog-db-data:
   ordering-db-data:
+  payments-db-data:
   rabbitmq-data:
   couchbase-data:  

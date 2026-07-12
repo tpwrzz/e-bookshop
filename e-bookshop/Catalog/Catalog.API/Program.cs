@@ -30,7 +30,6 @@ try
             "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level:u3}] {Message:lj} {Properties:j}{NewLine}{Exception}"));
 
     builder.Services.AddControllers();
-    builder.Services.AddOpenApi();
     builder.Services.AddSwaggerGen();
 
     builder.Services.AddDbContext<CatalogContext>(options =>
@@ -54,7 +53,7 @@ try
     using (var scope = app.Services.CreateScope())
     {
         var db = scope.ServiceProvider.GetRequiredService<CatalogContext>(); 
-        db.Database.Migrate();
+        await db.Database.MigrateAsync();
     }
     app.UseSerilogRequestLogging(opts =>
     {
@@ -65,7 +64,10 @@ try
     if (app.Environment.IsDevelopment())
     {
         app.UseSwagger();
-        app.UseSwaggerUI();
+        app.UseSwaggerUI(c =>
+        {
+            c.SwaggerEndpoint("/catalog/swagger/v1/swagger.json", "Catalog API");
+        });
     }
 
     app.UseHttpsRedirection();
