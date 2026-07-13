@@ -28,17 +28,15 @@ try
             rollingInterval: RollingInterval.Day,
             outputTemplate:
             "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level:u3}] {Message:lj} {Properties:j}{NewLine}{Exception}"));
-
+    builder.Services.AddGrpc();
     builder.Services.AddControllers();
     builder.Services.AddSwaggerGen();
 
     builder.Services.AddDbContext<CatalogContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("CatalogDb")));
 
-    // Validators
     builder.Services.AddValidatorsFromAssembly(typeof(CreateBookCommand).Assembly);
 
-    // MediatR — single registration
     builder.Services.AddMediatR(cfg =>
     {
         cfg.RegisterServicesFromAssembly(typeof(CreateBookCommand).Assembly);
@@ -48,7 +46,13 @@ try
 
     builder.Services.AddScoped<IBookRepository, BookRepository>();
     builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
-
+    builder.WebHost.ConfigureKestrel(options =>
+    {
+        options.ConfigureEndpointDefaults(listenOptions =>
+        {
+            listenOptions.Protocols = Microsoft.AspNetCore.Server.Kestrel.Core.HttpProtocols.Http1AndHttp2;
+        });
+    });
     var app = builder.Build();
     using (var scope = app.Services.CreateScope())
     {
@@ -73,7 +77,7 @@ try
     app.UseHttpsRedirection();
     app.UseAuthorization();
     app.MapControllers();
-
+    app.MapGrpcService<Catalog.API.Services.CatalogGrpcServiceImpl>();
     await app.RunAsync();
 }
 catch (Exception ex)

@@ -19,23 +19,25 @@ public class OrderPlacedConsumer(
     {
         var messageId = consumeContext.MessageId ?? Guid.NewGuid();
 
-        // Idempotency guard
         var alreadyProcessed = await context.ProcessedMessages
             .AnyAsync(m => m.MessageId == messageId);
 
         if (alreadyProcessed)
         {
-            logger.LogWarning("Message {MessageId} already processed — skipping", messageId);
+            logger.LogWarning("Message {MessageId} for order {OrderId} already processed - skipping",
+                messageId, consumeContext.Message.OrderId);
             return;
         }
 
         var message = consumeContext.Message;
-        logger.LogInformation("Processing payment for order {OrderId}", message.OrderId);
+        logger.LogInformation("Processing payment for order {OrderId}, amount {Amount} {Currency}",
+                              message.OrderId,
+                              message.TotalAmount,
+                              message.Currency);
 
         var payment = Payment.Process(message.OrderId, message.UserId, message.TotalAmount);
         await repository.AddAsync(payment);
 
-        // Mark as processed
         context.ProcessedMessages.Add(new ProcessedMessage
         {
             MessageId = messageId,
@@ -44,7 +46,6 @@ public class OrderPlacedConsumer(
         });
         await context.SaveChangesAsync();
 
-        // Publish result
         if (payment.Succeeded)
         {
             await publishEndpoint.Publish(new PaymentProcessed(
@@ -52,7 +53,7 @@ public class OrderPlacedConsumer(
                 message.UserId,
                 DateTime.UtcNow));
 
-            logger.LogInformation("Payment succeeded for order {OrderId}", message.OrderId);
+            logger.LogInformation("Payment {PaymentId} succeeded for order {OrderId}, amount {Amount}", payment.Id, message.OrderId, message.TotalAmount);
         }
         else
         {
@@ -62,8 +63,7 @@ public class OrderPlacedConsumer(
                 payment.FailureReason!,
                 DateTime.UtcNow));
 
-            logger.LogWarning("Payment failed for order {OrderId}: {Reason}",
-                message.OrderId, payment.FailureReason);
+            logger.LogWarning("Payment {PaymentId} failed for order {OrderId}: {Reason}", payment.Id, message.OrderId, payment.FailureReason);
         }
     }
 }

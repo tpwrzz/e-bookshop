@@ -27,7 +27,7 @@ try
         .Enrich.WithThreadId()
         .WriteTo.Console(outputTemplate:
             "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj} {Properties:j}{NewLine}{Exception}")
-        .WriteTo.File("logs/catalog-.log",
+        .WriteTo.File("logs/ordering-.log",
             rollingInterval: RollingInterval.Day,
             outputTemplate:
             "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level:u3}] {Message:lj} {Properties:j}{NewLine}{Exception}"));

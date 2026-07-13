@@ -31,6 +31,7 @@
         <Project Path="Payments/Payments.Tests/Payments.Tests.csproj" />
     </Folder>
   <Folder Name="/SharedKernel/">
+      <Project Path="SharedKernel/Bookshop.Contracts.Grpc/Bookshop.Contracts.Grpc.csproj" Id="899721b9-08a1-453c-855b-2e0ed2a3fffc" />
     <Project Path="SharedKernel/Bookshop.Contracts/Bookshop.Contracts.csproj" Id="5f937bdf-db37-4ff3-a6e8-3820c5fa79a9" />
     <Project Path="SharedKernel/Bookshop.SharedKernel/Bookshop.SharedKernel.csproj" Id="1c2b7128-dc2d-4a8f-b304-0f1a67f20067" />
   </Folder>

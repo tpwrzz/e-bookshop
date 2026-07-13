@@ -19,6 +19,7 @@ try
         .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
 
     var app = builder.Build();
+    app.UseDefaultFiles();
     app.UseStaticFiles();
     app.UseSerilogRequestLogging();
     app.MapReverseProxy();

@@ -58,7 +58,11 @@ try
         var db = scope.ServiceProvider.GetRequiredService<PaymentsContext>();
         await db.Database.MigrateAsync();
     }
-    app.UseSerilogRequestLogging();
+    app.UseSerilogRequestLogging(opts =>
+    {
+        opts.MessageTemplate =
+            "HTTP {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed:0.0000} ms";
+    });
 
     if (app.Environment.IsDevelopment())
     {

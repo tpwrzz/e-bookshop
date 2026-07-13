@@ -48,4 +48,16 @@ public class BasketsController(IMediator mediator) : ControllerBase
             _ => StatusCode(500, result.Message)
         };
     }
+
+    [HttpGet("price/{bookId}")]
+    public async Task<IActionResult> GetBookPrice(Guid bookId)
+    {
+        var result = await mediator.Send(new GetBookPriceQuery(bookId));
+        return result.ResultStatus switch
+        {
+            ResultStatus.Success => Ok(result.Data),
+            ResultStatus.NotFound => NotFound(result.Message),
+            _ => StatusCode(500, result.Message)
+        };
+    }
 }

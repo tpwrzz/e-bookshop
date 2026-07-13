@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+option csharp_namespace = "Bookshop.Contracts.Grpc";
+
+package catalog;
+
+service CatalogGrpcService {
+  // Batch lookup — used by Basket when validating/pricing multiple items in one basket.
+  rpc GetBookPrices (BookPricesRequest) returns (BookPricesReply);
+
+  // Single-item lookup — convenience for the standalone "show me this book's price" endpoint.
+  rpc GetBookPrice (BookPriceRequest) returns (BookPriceReply);
+}
+
+message BookPriceRequest {
+  string book_id = 1; // Guid as string
+}
+
+message BookPricesRequest {
+  repeated string book_ids = 1; // Guids as strings
+}
+
+message BookPriceReply {
+  string book_id = 1;
+  bool found = 2;
+  string title = 3;
+  double amount = 4;
+  string currency = 5;
+}
+
+message BookPricesReply {
+  repeated BookPriceReply prices = 1;
+}

@@ -7,6 +7,7 @@ WORKDIR /src
 
 COPY SharedKernel/Bookshop.SharedKernel/Bookshop.SharedKernel.csproj SharedKernel/Bookshop.SharedKernel/
 COPY SharedKernel/Bookshop.Contracts/Bookshop.Contracts.csproj SharedKernel/Bookshop.Contracts/
+COPY SharedKernel/Bookshop.Contracts.Grpc/Bookshop.Contracts.Grpc.csproj SharedKernel/Bookshop.Contracts.Grpc/
 COPY Basket/Basket.Domain/Basket.Domain.csproj Basket/Basket.Domain/
 COPY Basket/Basket.Application/Basket.Application.csproj Basket/Basket.Application/
 COPY Basket/Basket.Infrastructure/Basket.Infrastructure.csproj Basket/Basket.Infrastructure/

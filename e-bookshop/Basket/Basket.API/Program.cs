@@ -2,7 +2,9 @@ using Basket.Application.Baskets.Commands;
 using Basket.Application.Behaviors;
 using Basket.Domain.Repositories;
 using Basket.Infrastructure.Consumers;
+using Basket.Infrastructure.Grpc;
 using Basket.Infrastructure.Repositories;
+using Bookshop.Contracts.Grpc;
 using Couchbase.Extensions.DependencyInjection;
 using FluentValidation;
 using MassTransit;
@@ -33,7 +35,6 @@ try
     builder.Services.AddControllers();
     builder.Services.AddSwaggerGen();
 
-    // Couchbase
     builder.Services.AddCouchbase(options =>
     {
         options.ConnectionString = builder.Configuration.GetConnectionString("Couchbase");
@@ -43,7 +44,6 @@ try
     builder.Services.AddCouchbaseBucket<INamedBucketProvider>(
         builder.Configuration["Couchbase:BucketName"]!);
 
-    // MassTransit
     builder.Services.AddMassTransit(x =>
     {
         x.AddConsumer<OrderPlacedConsumer>();
@@ -59,7 +59,11 @@ try
             cfg.ConfigureEndpoints(ctx);
         });
     });
-
+    builder.Services.AddGrpcClient<CatalogGrpcService.CatalogGrpcServiceClient>(o =>
+    {
+        o.Address = new Uri(builder.Configuration["Catalog:GrpcAddress"]!);
+    });
+    builder.Services.AddScoped<ICatalogPriceClient, CatalogPriceClient>();
 
     builder.Services.AddValidatorsFromAssembly(typeof(UpsertBasketCommand).Assembly);
 
