@@ -42,7 +42,7 @@ namespace Catalog.API.Controllers
             };
         }
 
-        [HttpPost("createBook")]
+        [HttpPost("create")]
         public async Task<IActionResult> CreateBook(CreateBookDto book)
         {
             var result = await _mediator.Send(new CreateBookCommand(book));
@@ -54,7 +54,7 @@ namespace Catalog.API.Controllers
                 _ => StatusCode(500, result.Message)
             };
         }
-        [HttpPatch("updateBookPrice")]
+        [HttpPatch("updatePrice")]
         public async Task<IActionResult> UpdateBookPrice(UpdatePriceBookDto book)
         {
             var result = await _mediator.Send(new UpdateBookPriceCommand(book));

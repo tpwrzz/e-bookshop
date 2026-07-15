@@ -34,7 +34,7 @@ services:
       SA_PASSWORD: "YourStrong!Passw0rd"
       ACCEPT_EULA: "Y"
     ports:
-      - "1434:1433"          # Different HOST port — same container port 1433
+      - "1434:1433"         
     volumes:
       - ordering-db-data:/var/opt/mssql
     healthcheck:
@@ -47,7 +47,7 @@ services:
 
   catalog-api:
     build:
-      context: .                          # repo root — SharedKernel is visible
+      context: .                          
       dockerfile: Catalog/Catalog.API/Dockerfile
     ports:
       - "5103:8080"
@@ -60,6 +60,10 @@ services:
     depends_on:
       catalog-db:
         condition: service_healthy
+    develop:
+      watch:
+        - action: rebuild
+          path: .
 
   ordering-api:
     build:
@@ -79,6 +83,10 @@ services:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
+    develop:
+      watch:
+        - action: rebuild
+          path: .
 
   couchbase:
     image: couchbase:community-7.6.1
@@ -123,6 +131,10 @@ services:
         condition: service_healthy
       catalog-api:
        condition: service_started
+    develop:
+      watch:
+        - action: rebuild
+          path: .
 
   payments-db:
     image: mcr.microsoft.com/mssql/server:2022-latest
@@ -156,6 +168,10 @@ services:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
+    develop:
+      watch:
+        - action: rebuild
+          path: .
 
   gateway:
     build:
@@ -174,6 +190,10 @@ services:
       - ordering-api
       - basket-api
       - payments-api
+    develop:
+      watch:
+        - action: rebuild
+          path: .
 volumes:
   catalog-db-data:
   ordering-db-data:

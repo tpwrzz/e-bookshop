@@ -39,19 +39,18 @@ namespace Catalog.API.Controllers
             };
         }
 
-        [HttpPost("createAuthor")]
-        public async Task<IActionResult> CreateAuthor(AddAuthorDto author)
+        [HttpPost("create")]
+        public async Task<IActionResult> Create(AddAuthorDto author)
         {
             var result = await _mediator.Send(new CreateAuthorCommand(author));
 
             return result.ResultStatus switch
             {
-                ResultStatus.Created => CreatedAtAction(nameof(CreateAuthor), result.Message),
-                ResultStatus.NotFound => NotFound(result.Message),
+                ResultStatus.Created => CreatedAtAction(nameof(Create), result.Message),
                 _ => StatusCode(500, result.Message)
             };
         }
-        [HttpPatch("updateAuthor")]
+        [HttpPatch("update")]
         public async Task<IActionResult> UpdateAuthor(AuthorDto author)
         {
             var result = await _mediator.Send(new UpdateAuthorCommand(author));

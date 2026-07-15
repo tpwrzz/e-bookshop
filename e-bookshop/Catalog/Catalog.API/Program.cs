@@ -68,10 +68,7 @@ try
     if (app.Environment.IsDevelopment())
     {
         app.UseSwagger();
-        app.UseSwaggerUI(c =>
-        {
-            c.SwaggerEndpoint("/catalog/swagger/v1/swagger.json", "Catalog API");
-        });
+        app.UseSwaggerUI();
     }
 
     app.UseHttpsRedirection();

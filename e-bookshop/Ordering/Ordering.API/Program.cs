@@ -83,10 +83,7 @@ try
     if (app.Environment.IsDevelopment())
     {
         app.UseSwagger();
-        app.UseSwaggerUI(c =>
-        {
-            c.SwaggerEndpoint("/ordering/swagger/v1/swagger.json", "Ordering API");
-        });
+        app.UseSwaggerUI();
     }
 
     app.UseHttpsRedirection();

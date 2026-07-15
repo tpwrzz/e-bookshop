@@ -81,10 +81,7 @@ try
     if (app.Environment.IsDevelopment())
     {
         app.UseSwagger();
-        app.UseSwaggerUI(c =>
-        {
-            c.SwaggerEndpoint("/basket/swagger/v1/swagger.json", "Basket API");
-        });
+        app.UseSwaggerUI();
     }
 
     app.UseHttpsRedirection();

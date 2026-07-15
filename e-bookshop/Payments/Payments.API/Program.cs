@@ -67,10 +67,7 @@ try
     if (app.Environment.IsDevelopment())
     {
         app.UseSwagger();
-        app.UseSwaggerUI(c =>
-        {
-            c.SwaggerEndpoint("/payments/swagger/v1/swagger.json", "Payments API");
-        });
+        app.UseSwaggerUI();
     }
 
     app.UseHttpsRedirection();
