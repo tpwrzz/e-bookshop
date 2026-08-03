@@ -51,6 +51,7 @@ services:
       dockerfile: Catalog/Catalog.API/Dockerfile
     ports:
       - "5103:8080"
+      - "5104:8081"
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       ConnectionStrings__CatalogDb: >

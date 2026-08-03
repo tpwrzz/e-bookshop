@@ -5,6 +5,7 @@ using Catalog.Infrastructure;
 using Catalog.Infrastructure.Repositories;
 using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
@@ -29,6 +30,7 @@ try
             outputTemplate:
             "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level:u3}] {Message:lj} {Properties:j}{NewLine}{Exception}"));
     builder.Services.AddGrpc();
+    builder.Services.AddGrpcReflection();
     builder.Services.AddControllers();
     builder.Services.AddSwaggerGen();
 
@@ -48,13 +50,18 @@ try
     builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
     builder.WebHost.ConfigureKestrel(options =>
     {
-        options.ListenAnyIP(5103, o => o.Protocols = Microsoft.AspNetCore.Server.Kestrel.Core.HttpProtocols.Http1AndHttp2);
-        options.ListenAnyIP(7281, o =>
+        // REST API + Swagger
+        options.ListenAnyIP(8080, o =>
         {
-            o.Protocols = Microsoft.AspNetCore.Server.Kestrel.Core.HttpProtocols.Http1AndHttp2;
-            o.UseHttps();
+            o.Protocols = HttpProtocols.Http1;
         });
-    });
+
+        // gRPC
+        options.ListenAnyIP(8081, o =>
+        {
+            o.Protocols = HttpProtocols.Http2;
+        });
+    }); 
     var app = builder.Build();
     using (var scope = app.Services.CreateScope())
     {
@@ -73,10 +80,11 @@ try
         app.UseSwaggerUI();
     }
 
-    //app.UseHttpsRedirection();
+    app.UseHttpsRedirection();
     app.UseAuthorization();
     app.MapControllers();
     app.MapGrpcService<Catalog.API.Services.CatalogGrpcServiceImpl>();
+    app.MapGrpcReflectionService();
     await app.RunAsync();
 }
 catch (Exception ex)

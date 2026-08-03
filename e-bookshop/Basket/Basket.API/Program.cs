@@ -17,6 +17,9 @@ Log.Logger = new LoggerConfiguration()
 
 try
 {
+    AppContext.SetSwitch(
+    "System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport",
+    true);
     var builder = WebApplication.CreateBuilder(args);
 
     builder.Host.UseSerilog((ctx, services, config) => config
@@ -59,10 +62,21 @@ try
             cfg.ConfigureEndpoints(ctx);
         });
     });
+    var grpcAddress = builder.Configuration["Catalog:GrpcAddress"];
+
+    Console.WriteLine($"CATALOG GRPC ADDRESS = {grpcAddress}");
+
     builder.Services.AddGrpcClient<CatalogGrpcService.CatalogGrpcServiceClient>(o =>
     {
-        o.Address = new Uri(builder.Configuration["Catalog:GrpcAddress"]!);
-    });
+        o.Address = new Uri(grpcAddress!);
+    })
+.ConfigurePrimaryHttpMessageHandler(() =>
+{
+    return new SocketsHttpHandler
+    {
+        EnableMultipleHttp2Connections = true
+    };
+});
     builder.Services.AddScoped<ICatalogPriceClient, CatalogPriceClient>();
 
     builder.Services.AddValidatorsFromAssembly(typeof(UpsertBasketCommand).Assembly);
