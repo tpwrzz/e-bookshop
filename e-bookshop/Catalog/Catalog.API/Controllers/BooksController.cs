@@ -29,7 +29,7 @@ namespace Catalog.API.Controllers
                 _ => StatusCode(500, result.Message)
             };
         }
-        [HttpGet("filter")]
+        [HttpPost("filter")]
         public async Task<IActionResult> GetByFilter(BookFilterDto bookFilter)
         {
             var result = await _mediator.Send(new GetBooksQuery(bookFilter));

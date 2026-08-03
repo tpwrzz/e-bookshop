@@ -22,7 +22,7 @@ namespace Catalog.Application.Books.Commands
                     Message = $"Book with Id {request.UpdateBook.Id} was not found."
                 };
 
-            Enum.TryParse(request.UpdateBook.NewCurrency, true, out Currency currency);
+            Enum.TryParse<Currency>(request.UpdateBook.NewCurrency, true, out Currency currency);
             var newPrice = new Money(request.UpdateBook.NewPrice, currency);
             bookToUpdate.UpdatePrice(newPrice);
             await _repository.UpdateAsync(bookToUpdate);
