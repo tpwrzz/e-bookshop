@@ -48,9 +48,11 @@ try
     builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
     builder.WebHost.ConfigureKestrel(options =>
     {
-        options.ConfigureEndpointDefaults(listenOptions =>
+        options.ListenAnyIP(5103, o => o.Protocols = Microsoft.AspNetCore.Server.Kestrel.Core.HttpProtocols.Http1AndHttp2);
+        options.ListenAnyIP(7281, o =>
         {
-            listenOptions.Protocols = Microsoft.AspNetCore.Server.Kestrel.Core.HttpProtocols.Http1AndHttp2;
+            o.Protocols = Microsoft.AspNetCore.Server.Kestrel.Core.HttpProtocols.Http1AndHttp2;
+            o.UseHttps();
         });
     });
     var app = builder.Build();
@@ -71,7 +73,7 @@ try
         app.UseSwaggerUI();
     }
 
-    app.UseHttpsRedirection();
+    //app.UseHttpsRedirection();
     app.UseAuthorization();
     app.MapControllers();
     app.MapGrpcService<Catalog.API.Services.CatalogGrpcServiceImpl>();

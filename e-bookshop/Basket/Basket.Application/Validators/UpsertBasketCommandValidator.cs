@@ -17,8 +17,6 @@ public class UpsertBasketCommandValidator : AbstractValidator<UpsertBasketComman
         RuleForEach(x => x.Basket.Items).ChildRules(item =>
         {
             item.RuleFor(x => x.BookId).NotEmpty();
-            item.RuleFor(x => x.Title).NotEmpty();
-            item.RuleFor(x => x.UnitPrice).GreaterThan(0);
             item.RuleFor(x => x.Quantity).GreaterThan(0);
         });
     }
