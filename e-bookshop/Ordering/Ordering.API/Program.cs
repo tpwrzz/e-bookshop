@@ -33,7 +33,11 @@ try
             "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level:u3}] {Message:lj} {Properties:j}{NewLine}{Exception}"));
 
     builder.Services.AddControllers();
-    builder.Services.AddSwaggerGen();
+    builder.Services.AddSwaggerGen(options =>
+    {
+        options.AddServer(new Microsoft.OpenApi.OpenApiServer { Url = "/ordering", Description = "Via Gateway" });
+        options.AddServer(new Microsoft.OpenApi.OpenApiServer { Url = "/", Description = "Direct" });
+    });
 
     builder.Services.AddMassTransit(x =>
     {

@@ -12,6 +12,7 @@ using Bookshop.SharedKernel.Application.Common;
 namespace Catalog.API.Controllers
 {
     [ApiController]
+    // The gateway owns the public /catalog prefix and removes it before forwarding.
     [Route("api/books")]
     public class BooksController(IMediator mediator) : ControllerBase
     {

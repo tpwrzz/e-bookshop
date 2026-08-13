@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Catalog.API.Controllers
 {
     [ApiController]
+    // The gateway owns the public /catalog prefix and removes it before forwarding.
     [Route("api/authors")]
     public class AuthorsController(IMediator mediator) : ControllerBase
     {

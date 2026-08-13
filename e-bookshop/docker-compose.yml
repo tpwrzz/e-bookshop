@@ -124,7 +124,7 @@ services:
       Couchbase__Password: password
       Couchbase__BucketName: basket
       RabbitMQ__Host: rabbitmq
-      Catalog__GrpcAddress: http://catalog-api:8080
+      Catalog__GrpcAddress: http://catalog-api:8081
     depends_on:
       couchbase:
         condition: service_healthy

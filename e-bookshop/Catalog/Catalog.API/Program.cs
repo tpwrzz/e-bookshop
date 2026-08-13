@@ -1,3 +1,4 @@
+using Bookshop.SharedKernel;
 using Catalog.Application.Behaviors;
 using Catalog.Application.Books.Commands;
 using Catalog.Domain.Repositories;
@@ -7,6 +8,8 @@ using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.OpenApi;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
@@ -30,10 +33,11 @@ try
             outputTemplate:
             "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level:u3}] {Message:lj} {Properties:j}{NewLine}{Exception}"));
     builder.Services.AddGrpc();
-    builder.Services.AddGrpcReflection();
-    builder.Services.AddControllers();
-    builder.Services.AddSwaggerGen();
-
+    builder.Services.AddControllers(); builder.Services.AddSwaggerGen(options =>
+    {
+        options.AddServer(new Microsoft.OpenApi.OpenApiServer { Url = "/catalog", Description = "Via Gateway" });
+        options.AddServer(new Microsoft.OpenApi.OpenApiServer { Url = "/", Description = "Direct" });
+    });
     builder.Services.AddDbContext<CatalogContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("CatalogDb")));
 
@@ -61,30 +65,39 @@ try
         {
             o.Protocols = HttpProtocols.Http2;
         });
-    }); 
+    });
     var app = builder.Build();
+    app.Use(async (context, next) =>
+    {
+        Log.Information("Incoming headers: {Headers}",
+            string.Join(", ", context.Request.Headers.Select(h => $"{h.Key}={h.Value}")));
+        await next();
+    });
     using (var scope = app.Services.CreateScope())
     {
-        var db = scope.ServiceProvider.GetRequiredService<CatalogContext>(); 
+        var db = scope.ServiceProvider.GetRequiredService<CatalogContext>();
         await db.Database.MigrateAsync();
     }
     app.UseSerilogRequestLogging(opts =>
     {
         opts.MessageTemplate =
             "HTTP {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed:0.0000} ms";
+
     });
 
     if (app.Environment.IsDevelopment())
     {
         app.UseSwagger();
-        app.UseSwaggerUI();
+        app.UseSwaggerUI(options =>
+        {
+            // Keep the schema request beneath /catalog/swagger when the API is proxied.
+            options.SwaggerEndpoint("./v1/swagger.json", "Catalog API v1");
+        });
     }
 
     app.UseHttpsRedirection();
     app.UseAuthorization();
     app.MapControllers();
-    app.MapGrpcService<Catalog.API.Services.CatalogGrpcServiceImpl>();
-    app.MapGrpcReflectionService();
     await app.RunAsync();
 }
 catch (Exception ex)
